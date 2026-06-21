@@ -168,16 +168,26 @@
 
         <!-- 右側：コンソール＆説明 -->
         <div class="w-full lg:w-1/2 space-y-6">
-            <div class="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-[2rem] border-4 border-slate-800 shadow-[8px_8px_0_0_rgba(15,23,42,0.1)] space-y-6 relative overflow-hidden">
+            <div class="bg-white/95 backdrop-blur-md p-6 sm:p-8 rounded-[2rem] border-4 border-slate-800 shadow-[8px_8px_0_0_rgba(15,23,42,0.1)] space-y-5 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-32 h-32 bg-slate-100 rounded-full -mr-10 -mt-10 opacity-50 pointer-events-none"></div>
                 
-                <div class="space-y-3 relative z-10">
+                <div class="space-y-2 relative z-10">
                     <h2 id="main-heading" class="text-2xl sm:text-3xl font-black tracking-tight text-slate-800 leading-tight">
                         Pokémon Gacha
                     </h2>
                     <p id="main-desc" class="text-sm text-slate-600 leading-relaxed font-bold">
                         <!-- JSで動的に書き換えられます -->
                     </p>
+                </div>
+
+                <!-- 遊び方ガイド -->
+                <div class="bg-slate-50 p-4 sm:p-5 rounded-2xl border-2 border-slate-200 relative z-10 shadow-sm">
+                    <h3 id="how-to-play-title" class="text-sm font-black text-slate-700 mb-2 border-b-2 border-slate-200 pb-2">
+                        <!-- JSで動的に書き換えられます -->
+                    </h3>
+                    <div id="how-to-play-content" class="text-xs sm:text-sm">
+                        <!-- JSで動的に書き換えられます -->
+                    </div>
                 </div>
 
                 <!-- 地方選択 -->
@@ -196,12 +206,12 @@
     </main>
 
     <!-- フッター (免責事項・寄付) -->
-    <footer class="w-full text-center text-slate-500/70 text-[10px] sm:text-xs pb-6 pt-2 z-10 relative mt-auto">
-        <div class="max-w-3xl mx-auto px-4 space-y-2 leading-relaxed">
+    <footer class="w-full text-slate-400/90 text-[10px] sm:text-xs pb-6 pt-4 z-10 relative mt-auto px-4 bg-white/30 backdrop-blur-sm border-t border-slate-200/50">
+        <div class="max-w-4xl mx-auto space-y-3 leading-relaxed text-justify sm:text-center">
             <p id="footer-disclaimer"></p>
-            <p>
+            <p class="text-center">
                 <span id="footer-donation-text"></span>
-                <span class="select-all font-mono bg-slate-800/5 px-1 py-0.5 rounded border border-slate-800/10">brashridge65@walletofsatoshi.com</span>
+                <span class="select-all font-mono bg-slate-800/5 px-1 py-0.5 rounded border border-slate-800/10 text-slate-600 font-bold">brashridge65@walletofsatoshi.com</span>
             </p>
         </div>
     </footer>
@@ -327,11 +337,20 @@
             en: {
                 pageTitle: "Pokémon Gacha",
                 heading: "Pokémon Gacha",
-                desc: "【Infinite encounters unfold within the capsule. Turn the wheel of destiny to catch unseen Pokémon!】<br>Fetching real Pokémon data from PokéAPI, get random Pokémon. You can spin endlessly for completely free.",
+                desc: "【Infinite encounters unfold within the capsule.】<br>Turn the wheel of destiny to catch unseen Pokémon!",
+                howToPlayTitle: "<i class='fa-solid fa-circle-question text-blue-500 mr-1'></i> How to Play",
+                howToPlayContent: `
+                    <ul class='space-y-1.5 text-slate-600 font-bold ml-1'>
+                        <li>1. 🌐 Select a region from the dropdown.</li>
+                        <li>2. 🔴 Tap to spin the Gacha (100% Free!).</li>
+                        <li>3. ✨ Discover a random Pokémon card!</li>
+                        <li>4. 🐦 The card image is <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>automatically copied</span>! Paste and share it easily on X.</li>
+                    </ul>
+                `,
                 selectMode: "SELECT REGION", btnPlay: "PLAY GACHA", loading: "LOADING DATA...",
                 lblGenus: "Category", lblHeight: "Height", lblWeight: "Weight", lblAbilities: "Abilities", lblStats: "BASE STATS",
                 shareX: "Share on X", close: "Close", pokedex: "Pokédex",
-                footerDisclaimer: "This is an unofficial fan site. Pokémon and all respective names are trademarks of Nintendo, Creatures Inc., and GAME FREAK inc. This site respects all copyrights and operates in compliance with applicable laws, with no intention of infringement.",
+                footerDisclaimer: "【Disclaimer】 This is an unofficial, non-commercial fan site created purely out of love for the franchise, and is not affiliated with, sponsored, or endorsed by Nintendo, Creatures Inc., GAME FREAK inc., or The Pokémon Company. All data and images are dynamically fetched via public APIs (PokéAPI, Pokémon TCG API) and are not hosted or stored on our servers. All copyrights and trademarks belong to their respective owners. We deeply respect all intellectual property rights and operate in strict compliance with applicable laws and guidelines, with absolutely no intent to infringe. Should any rights holder request removal or raise concerns, we will take immediate and appropriate action to comply.",
                 footerDonation: "Bitcoin (Lightning) Donation: ",
                 opts: [
                     {val: "all", text: "🌐 All Regions (1-1025)"},
@@ -345,11 +364,20 @@
             jp: {
                 pageTitle: "ポケモン ガシャポン",
                 heading: "ポケモン ガシャポン",
-                desc: "【カプセルの中に広がる無限の出会い。運命のハンドルを回して、まだ見ぬポケモンたちを捕まえよう！】<br>PokeAPIから本物のポケモンデータを引き出し、ランダムでポケモンをゲット。何度でも永久無料で回せます。",
+                desc: "【カプセルの中に広がる無限の出会い。】<br>運命のハンドルを回して、まだ見ぬポケモンたちを捕まえよう！",
+                howToPlayTitle: "<i class='fa-solid fa-circle-question text-blue-500 mr-1'></i> 遊び方",
+                howToPlayContent: `
+                    <ul class='space-y-1.5 text-slate-600 font-bold ml-1'>
+                        <li>1. 🌐 出現させたい地方を選ぶ</li>
+                        <li>2. 🔴 ガチャを回す（何度でも無料！）</li>
+                        <li>3. ✨ 未知のポケモンカードと出会う！</li>
+                        <li>4. 🐦 <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>画像が自動でコピー</span>されます！そのままX(旧Twitter)へペーストして簡単シェア！</li>
+                    </ul>
+                `,
                 selectMode: "出現する地方を選択", btnPlay: "ガチャを回す", loading: "図鑑データを取得中...",
                 lblGenus: "分類", lblHeight: "高さ", lblWeight: "重さ", lblAbilities: "特性", lblStats: "種族値",
                 shareX: "Xに投稿する", close: "閉じる", pokedex: "公式図鑑で確認",
-                footerDisclaimer: "※当サイトはファンが制作した非公式のサイトです。ポケットモンスター・ポケモン・Pokémonは任天堂・クリーチャーズ・ゲームフリークの登録商標です。当サイトはすべての著作権を大切にし、法令を遵守して運営しており、権利を侵害する意図は一切ございません。",
+                footerDisclaimer: "【免責事項】当サイトは、いちファンが個人的に作成した非公式のサイトであり、株式会社ポケモン、任天堂株式会社、株式会社クリーチャーズ、株式会社ゲームフリーク、その他の権利者様とは一切関係がございません。サイト内のデータや画像は全て公開API（PokéAPI, Pokémon TCG API）より動的に取得しており、当サーバー上に一切の著作物を保持しておりません。各著作物の権利はすべて元の権利者様に帰属します。著作権の侵害を目的とするものではなく、法令およびガイドラインを最大限尊重して運営しております。万が一、権利者様からのご指摘がございましたら速やかに対応（該当コンテンツの公開停止等）をいたします。",
                 footerDonation: "Bitcoin (Lightning) 寄付アドレス: ",
                 opts: [
                     {val: "all", text: "🌐 全地方 (1-1025)"},
@@ -394,6 +422,11 @@
             document.getElementById('header-title').textContent = t.heading;
             document.getElementById('main-heading').textContent = t.heading;
             document.getElementById('main-desc').innerHTML = t.desc;
+            
+            // 遊び方
+            document.getElementById('how-to-play-title').innerHTML = t.howToPlayTitle;
+            document.getElementById('how-to-play-content').innerHTML = t.howToPlayContent;
+
             document.getElementById('label-mode').innerHTML = `<i class="fa-solid fa-map-location-dot mr-1 text-blue-500"></i>${t.selectMode}`;
             document.getElementById('btn-play-text').textContent = t.btnPlay;
             document.getElementById('loading-spinner-text').textContent = t.loading;
