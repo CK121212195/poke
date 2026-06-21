@@ -318,6 +318,9 @@
         let lastWonItemImageUrl = "";
         let lastWonItemName = "";
 
+        // 特性名の日本語キャッシュ（無駄なAPI通信を削減）
+        const abilityCache = {};
+
         // BGM管理変数と要素取得
         const bgmOp = document.getElementById('bgm-op');
         const bgmBattle = document.getElementById('bgm-battle');
@@ -347,7 +350,7 @@
                         <li>4. 🐦 The card image is <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>automatically copied</span>! Paste and share it easily on X.</li>
                     </ul>
                 `,
-                selectMode: "SELECT REGION", btnPlay: "PLAY GACHA", loading: "LOADING DATA...",
+                selectMode: "SELECT REGION", btnPlay: "PLAY GACHA", loading: "LOADING DATA...", loadingImg: "LOADING IMAGE...",
                 lblGenus: "Category", lblHeight: "Height", lblWeight: "Weight", lblAbilities: "Abilities", lblStats: "BASE STATS",
                 shareX: "Share on X", close: "Close", pokedex: "Pokédex",
                 footerDisclaimer: "【Disclaimer】 This is an unofficial, non-commercial fan site created purely out of love for the franchise, and is not affiliated with, sponsored, or endorsed by Nintendo, Creatures Inc., GAME FREAK inc., or The Pokémon Company. All data and images are dynamically fetched via public APIs (PokéAPI, Pokémon TCG API) and are not hosted or stored on our servers. All copyrights and trademarks belong to their respective owners. We deeply respect all intellectual property rights and operate in strict compliance with applicable laws and guidelines, with absolutely no intent to infringe. Should any rights holder request removal or raise concerns, we will take immediate and appropriate action to comply.",
@@ -374,7 +377,7 @@
                         <li>4. 🐦 <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>画像が自動でコピー</span>されます！そのままX(旧Twitter)へペーストして簡単シェア！</li>
                     </ul>
                 `,
-                selectMode: "出現する地方を選択", btnPlay: "ガチャを回す", loading: "図鑑データを取得中...",
+                selectMode: "出現する地方を選択", btnPlay: "ガチャを回す", loading: "図鑑データを取得中...", loadingImg: "画像を読み込み中...",
                 lblGenus: "分類", lblHeight: "高さ", lblWeight: "重さ", lblAbilities: "特性", lblStats: "種族値",
                 shareX: "Xに投稿する", close: "閉じる", pokedex: "公式図鑑で確認",
                 footerDisclaimer: "【免責事項】当サイトは、いちファンが個人的に作成した非公式のサイトであり、株式会社ポケモン、任天堂株式会社、株式会社クリーチャーズ、株式会社ゲームフリーク、その他の権利者様とは一切関係がございません。サイト内のデータや画像は全て公開API（PokéAPI, Pokémon TCG API）より動的に取得しており、当サーバー上に一切の著作物を保持しておりません。各著作物の権利はすべて元の権利者様に帰属します。著作権の侵害を目的とするものではなく、法令およびガイドラインを最大限尊重して運営しております。万が一、権利者様からのご指摘がございましたら速やかに対応（該当コンテンツの公開停止等）をいたします。",
@@ -461,7 +464,6 @@
             const cryAudio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`);
             cryAudio.volume = 0.5;
             
-            // 鳴き声が終了したタイミングで戦闘曲をループ再生開始
             cryAudio.onended = () => {
                 if (currentState === STATE.REVEALED && soundEnabled) {
                     bgmBattle.volume = 0.2;
@@ -472,7 +474,6 @@
 
             cryAudio.play().catch(e => {
                 console.warn("鳴き声データの再生に失敗しました", e);
-                // エラー時は1秒後に戦闘曲を再生
                 setTimeout(() => {
                     if (currentState === STATE.REVEALED && soundEnabled) {
                         bgmBattle.volume = 0.2;
@@ -525,7 +526,6 @@
             soundEnabled = !soundEnabled; 
             document.getElementById('sound-icon').className = soundEnabled ? "fa-solid fa-volume-high text-red-500" : "fa-solid fa-volume-xmark text-slate-400"; 
             
-            // BGMの再生/停止を連動させる
             if (soundEnabled) {
                 if (currentState === STATE.REVEALED) {
                     bgmBattle.play().catch(e=>{});
@@ -602,6 +602,7 @@
 
             // 初期化
             document.getElementById('prize-name').textContent = TRANSLATIONS[currentLang].loading;
+            document.getElementById('loading-spinner-text').textContent = TRANSLATIONS[currentLang].loading;
             document.getElementById('prize-rarity').textContent = "No. ???";
             document.getElementById('prize-genus-detail').textContent = "--";
             document.getElementById('prize-types').innerHTML = "";
@@ -625,11 +626,24 @@
             document.getElementById('crank-handle').style.transition = "none";
 
             try {
+                // TCG APIは遅いことが多いので、通信量削減(select)と2秒のタイムアウトを設ける
+                const fetchTcgApi = async () => {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 2000);
+                    try {
+                        const res = await fetch(`https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:${targetId}&select=id,images`, { signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        return res;
+                    } catch (e) {
+                        return null; // タイムアウト時はnullを返して即座に公式アートワークにフォールバック
+                    }
+                };
+
                 // APIからデータ並行取得 (PokeAPI + Pokemon TCG API)
                 const [pokeRes, speciesRes, tcgRes] = await Promise.all([
                     fetch(`https://pokeapi.co/api/v2/pokemon/${targetId}`),
                     fetch(`https://pokeapi.co/api/v2/pokemon-species/${targetId}`),
-                    fetch(`https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:${targetId}`).catch(() => null)
+                    fetchTcgApi()
                 ]);
 
                 const pokeData = await pokeRes.json();
@@ -641,16 +655,12 @@
                     try {
                         const tcgData = await tcgRes.json();
                         if (tcgData && tcgData.data && tcgData.data.length > 0) {
-                            // 複数カードがある場合はランダムに1枚抽出
                             const randomCard = tcgData.data[Math.floor(Math.random() * tcgData.data.length)];
                             imgUrl = randomCard.images.large || randomCard.images.small;
                         }
-                    } catch(e) {
-                        console.warn("TCG API parse error", e);
-                    }
+                    } catch(e) { console.warn("TCG API parse error", e); }
                 }
 
-                // カードが見つからない場合は公式アートワークをフォールバックに
                 if (!imgUrl) {
                     imgUrl = (pokeData.sprites.other && pokeData.sprites.other["official-artwork"].front_default) 
                              ? pokeData.sprites.other["official-artwork"].front_default 
@@ -694,11 +704,10 @@
                     return `<span class="px-2 py-0.5 rounded text-[10px] font-bold shadow-sm" style="background-color:${color.bg}; color:${color.text}; border: 1px solid rgba(0,0,0,0.1)">${displayType}</span>`;
                 }).join('');
 
-                // 高さ・重さ
                 const heightM = (pokeData.height / 10).toFixed(1);
                 const weightKg = (pokeData.weight / 10).toFixed(1);
 
-                // 特性
+                // 特性（キャッシュを活用して高速化）
                 const abilitiesHtmlPromises = pokeData.abilities.map(async (a) => {
                     let abName = a.ability.name.replace('-', ' ');
                     if (currentLang === 'en') {
@@ -706,11 +715,17 @@
                         const suffix = a.is_hidden ? ' <span class="text-[10px] text-slate-400 font-normal">(Hidden)</span>' : '';
                         return `<span class="px-2 py-1 bg-slate-100 rounded-lg text-xs border border-slate-200">${abName}${suffix}</span>`;
                     } else {
+                        if (abilityCache[a.ability.url]) {
+                            const jpAb = abilityCache[a.ability.url];
+                            const suffix = a.is_hidden ? ' <span class="text-[10px] text-slate-400 font-normal">(夢)</span>' : '';
+                            return `<span class="px-2 py-1 bg-slate-100 rounded-lg text-xs border border-slate-200">${jpAb}${suffix}</span>`;
+                        }
                         try {
                             const abRes = await fetch(a.ability.url);
                             const abData = await abRes.json();
                             const jpObj = abData.names.find(n => n.language.name === 'ja-Hrkt') || abData.names.find(n => n.language.name === 'ja');
                             const jpAb = jpObj ? jpObj.name : abName;
+                            abilityCache[a.ability.url] = jpAb; // キャッシュ保存
                             const suffix = a.is_hidden ? ' <span class="text-[10px] text-slate-400 font-normal">(夢)</span>' : '';
                             return `<span class="px-2 py-1 bg-slate-100 rounded-lg text-xs border border-slate-200">${jpAb}${suffix}</span>`;
                         } catch(e) { 
@@ -739,51 +754,60 @@
                     `;
                 }).join('');
 
+                // ========= ここから先行レンダリング（体感速度アップのキモ） =========
+                
+                document.getElementById('prize-name').textContent = finalName;
+                document.getElementById('prize-genus-detail').textContent = finalGenus || "--";
+                document.getElementById('prize-rarity').textContent = `No. ${targetId.toString().padStart(4, '0')}`;
+                document.getElementById('prize-types').innerHTML = typesHtml;
+                document.getElementById('prize-height').textContent = `${heightM} m`;
+                document.getElementById('prize-weight').textContent = `${weightKg} kg`;
+                document.getElementById('prize-flavor-text').textContent = flavorText;
+                document.getElementById('prize-abilities').innerHTML = abilitiesHtmlArr.join('');
+                
+                const statsContainer = document.getElementById('stats-container');
+                statsContainer.innerHTML = statsHtml;
+                
+                // アニメーション発火のため少し遅らせる
+                setTimeout(() => {
+                    statsContainer.querySelectorAll('.stat-bar-fill').forEach(bar => {
+                        bar.style.width = bar.getAttribute('data-width');
+                    });
+                }, 50);
+
+                const officialUrl = currentLang === 'en' ? `https://www.pokemon.com/us/pokedex/${targetId}` : `https://zukan.pokemon.co.jp/detail/${targetId}`;
+                document.getElementById('btn-explorer-link').href = officialUrl;
+                
+                lastWonItemImageUrl = imgUrl; lastWonItemName = finalName;
+
+                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ef4444', '#ffffff', '#eab308'] });
+                
+                // 画像より先にBGMとファンファーレ・鳴き声を鳴らす
+                bgmOp.pause();
+                playAudio('success');
+                setTimeout(() => { playPokemonCry(targetId); }, 600);
+
+                // ロードスピナーのテキストを「画像取得中」に変更
+                document.getElementById('loading-spinner-text').textContent = TRANSLATIONS[currentLang].loadingImg;
+
+                // ========= 画像の非同期ロード =========
                 const preloaderImg = new Image();
                 preloaderImg.crossOrigin = "anonymous";
                 
-                const finalizeReveal = () => {
+                preloaderImg.onload = () => {
                     loader.classList.add('opacity-0');
                     setTimeout(() => loader.classList.add('hidden'), 400); 
                     
                     pImg.src = imgUrl;
                     pImg.classList.remove('opacity-0', 'scale-90'); pImg.classList.add('opacity-100', 'scale-100');
-                    
-                    document.getElementById('prize-name').textContent = finalName;
-                    document.getElementById('prize-genus-detail').textContent = finalGenus || "--";
-                    document.getElementById('prize-rarity').textContent = `No. ${targetId.toString().padStart(4, '0')}`;
-                    document.getElementById('prize-types').innerHTML = typesHtml;
-                    document.getElementById('prize-height').textContent = `${heightM} m`;
-                    document.getElementById('prize-weight').textContent = `${weightKg} kg`;
-                    document.getElementById('prize-flavor-text').textContent = flavorText;
-                    document.getElementById('prize-abilities').innerHTML = abilitiesHtmlArr.join('');
-                    
-                    const statsContainer = document.getElementById('stats-container');
-                    statsContainer.innerHTML = statsHtml;
-                    
-                    setTimeout(() => {
-                        statsContainer.querySelectorAll('.stat-bar-fill').forEach(bar => {
-                            bar.style.width = bar.getAttribute('data-width');
-                        });
-                    }, 50);
-
-                    const officialUrl = currentLang === 'en' ? `https://www.pokemon.com/us/pokedex/${targetId}` : `https://zukan.pokemon.co.jp/detail/${targetId}`;
-                    document.getElementById('btn-explorer-link').href = officialUrl;
-                    
-                    lastWonItemImageUrl = imgUrl; lastWonItemName = finalName;
-
-                    confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ef4444', '#ffffff', '#eab308'] });
-                    
-                    // オープニング曲を一時停止し、ファンファーレ音 → 本物の鳴き声 → 戦闘曲の順に再生
-                    bgmOp.pause();
-                    playAudio('success');
-                    setTimeout(() => {
-                        playPokemonCry(targetId);
-                    }, 600);
                 };
-
-                preloaderImg.onload = finalizeReveal;
-                preloaderImg.onerror = finalizeReveal; 
+                
+                preloaderImg.onerror = () => {
+                    // エラー時でもローダーは消す
+                    loader.classList.add('opacity-0');
+                    setTimeout(() => loader.classList.add('hidden'), 400); 
+                };
+                
                 preloaderImg.src = imgUrl; 
 
             } catch (err) {
