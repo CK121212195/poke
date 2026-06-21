@@ -100,9 +100,10 @@
     <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 shadow-md border-b-4 border-slate-800">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-full border-4 border-slate-800 bg-red-500 relative flex items-center justify-center shadow-inner">
-                    <div class="absolute inset-x-0 h-1 bg-slate-800"></div>
-                    <div class="w-3 h-3 bg-white border-2 border-slate-800 rounded-full z-10"></div>
+                <!-- 3色デザインのモンスターボールアイコン -->
+                <div class="w-10 h-10 rounded-full border-4 border-slate-800 bg-white relative flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+                    <div class="absolute top-0 inset-x-0 h-1/2 bg-red-500 border-b-[3px] border-slate-800"></div>
+                    <div class="w-3.5 h-3.5 bg-white border-[3px] border-slate-800 rounded-full z-10 relative"></div>
                 </div>
                 <div>
                     <h1 id="header-title" class="text-xl sm:text-2xl font-black tracking-tight text-slate-800">
@@ -116,8 +117,13 @@
                     <i class="fa-solid fa-globe text-blue-500"></i>
                     <span id="lang-toggle-text">EN / JP</span>
                 </button>
-                <button id="sound-toggle" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center space-x-1 border-2 border-slate-300">
-                    <i id="sound-icon" class="fa-solid fa-volume-high text-red-500"></i>
+                <!-- BGM（ミュージック）ON/OFF トグル -->
+                <button id="music-toggle" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center border-2 border-slate-300" title="BGM">
+                    <i id="music-icon" class="fa-solid fa-music text-blue-500 text-sm"></i>
+                </button>
+                <!-- 効果音（SE）ON/OFF トグル -->
+                <button id="sound-toggle" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center justify-center border-2 border-slate-300" title="Sound Effects">
+                    <i id="sound-icon" class="fa-solid fa-volume-high text-red-500 text-sm"></i>
                 </button>
             </div>
         </div>
@@ -157,10 +163,12 @@
                 <div class="relative w-full h-24 bg-slate-800 rounded-2xl mt-6 border-4 border-slate-600 shadow-inner overflow-hidden flex justify-center items-center">
                     <div class="w-24 h-8 bg-black/50 rounded-full blur-md absolute bottom-2"></div>
                     
-                    <div id="dispensed-capsule" class="absolute hidden w-16 h-16 rounded-full border-4 border-slate-800 shadow-xl cursor-pointer hover:scale-110 active:scale-95 transition-all duration-150 z-20 overflow-hidden flex items-center justify-center bg-white">
-                        <div class="absolute top-0 inset-x-0 h-1/2 bg-red-500 border-b-4 border-slate-800"></div>
-                        <div class="absolute w-5 h-5 bg-white border-4 border-slate-800 rounded-full z-10"></div>
-                        <div class="absolute w-2 h-2 bg-slate-300 rounded-full z-10 animate-ping"></div>
+                    <!-- 3色デザインの排出カプセル -->
+                    <div id="dispensed-capsule" class="absolute hidden w-16 h-16 rounded-full border-4 border-slate-800 shadow-xl cursor-pointer hover:scale-110 active:scale-95 transition-all duration-150 z-20 overflow-hidden flex items-center justify-center bg-white shrink-0">
+                        <div class="absolute top-0 inset-x-0 h-1/2 bg-red-500 border-b-[4px] border-slate-800"></div>
+                        <div class="w-5 h-5 bg-white border-[4px] border-slate-800 rounded-full z-10 relative flex items-center justify-center">
+                            <div class="w-2 h-2 bg-slate-300 rounded-full z-20 animate-ping"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -238,9 +246,10 @@
                     <!-- 画像エリア（ポケモンカード仕様） -->
                     <div class="relative w-full min-h-[300px] sm:min-h-[380px] flex items-center justify-center group mb-2 overflow-visible">
                         <div id="prize-img-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-transparent z-10 fade-transition">
-                            <div class="w-12 h-12 bg-red-500 rounded-full border-4 border-slate-800 flex items-center justify-center animate-bounce">
-                                <div class="w-full h-1 bg-slate-800 absolute"></div>
-                                <div class="w-4 h-4 bg-white border-2 border-slate-800 rounded-full z-10"></div>
+                            <!-- 3色デザインのローディングボール -->
+                            <div class="w-12 h-12 bg-white rounded-full border-4 border-slate-800 flex items-center justify-center animate-bounce relative overflow-hidden shrink-0 shadow-sm">
+                                <div class="absolute top-0 inset-x-0 h-1/2 bg-red-500 border-b-[3px] border-slate-800"></div>
+                                <div class="w-4 h-4 bg-white border-[3px] border-slate-800 rounded-full z-10 relative"></div>
                             </div>
                             <span id="loading-spinner-text" class="font-pixel text-sm font-bold text-slate-500 mt-4 animate-pulse">LOADING DATA...</span>
                         </div>
@@ -311,14 +320,14 @@
     <script>
         const STATE = { IDLE: "idle", ROLLING: "rolling", HAS_CAPSULE: "has_capsule", REVEALED: "revealed" };
         let currentState = STATE.IDLE;
-        let soundEnabled = true;
-        // デフォルトの言語を英語に設定
+        let soundEnabled = true; // SE（効果音）の管理
+        let bgmEnabled = true;   // BGM（音楽）の管理
         let currentLang = 'en';
 
         let lastWonItemImageUrl = "";
         let lastWonItemName = "";
 
-        // 特性名の日本語キャッシュ（無駄なAPI通信を削減）
+        // 特性名の日本語キャッシュ
         const abilityCache = {};
 
         // BGM管理変数と要素取得
@@ -328,10 +337,12 @@
 
         // ブラウザの自動再生対策: 初回クリック時にオープニングBGMを再生
         document.body.addEventListener('click', () => {
-            if (!isOpStarted && soundEnabled) {
-                bgmOp.volume = 0.2; // 音量調整
-                bgmOp.play().catch(e => console.warn("BGM再生ブロック", e));
+            if (!isOpStarted) {
                 isOpStarted = true;
+                if (bgmEnabled) {
+                    bgmOp.volume = 0.2;
+                    bgmOp.play().catch(e => console.warn("BGM再生ブロック", e));
+                }
             }
         }, { once: true });
 
@@ -426,7 +437,6 @@
             document.getElementById('main-heading').textContent = t.heading;
             document.getElementById('main-desc').innerHTML = t.desc;
             
-            // 遊び方
             document.getElementById('how-to-play-title').innerHTML = t.howToPlayTitle;
             document.getElementById('how-to-play-content').innerHTML = t.howToPlayContent;
 
@@ -446,7 +456,6 @@
 
             document.getElementById('lang-toggle-text').textContent = lang === 'en' ? 'EN / JP' : 'JP / EN';
             
-            // フッター関連
             document.getElementById('footer-disclaimer').textContent = t.footerDisclaimer;
             document.getElementById('footer-donation-text').textContent = t.footerDonation;
 
@@ -465,7 +474,7 @@
             cryAudio.volume = 0.5;
             
             cryAudio.onended = () => {
-                if (currentState === STATE.REVEALED && soundEnabled) {
+                if (currentState === STATE.REVEALED && bgmEnabled) {
                     bgmBattle.volume = 0.2;
                     bgmBattle.currentTime = 0;
                     bgmBattle.play().catch(e => console.warn("戦闘BGM再生エラー", e));
@@ -475,7 +484,7 @@
             cryAudio.play().catch(e => {
                 console.warn("鳴き声データの再生に失敗しました", e);
                 setTimeout(() => {
-                    if (currentState === STATE.REVEALED && soundEnabled) {
+                    if (currentState === STATE.REVEALED && bgmEnabled) {
                         bgmBattle.volume = 0.2;
                         bgmBattle.currentTime = 0;
                         bgmBattle.play().catch(err => console.warn(err));
@@ -521,12 +530,12 @@
             } catch (e) { console.warn("Audio error: ", e); }
         }
 
-        // サウンドボタンのオンオフ処理
-        document.getElementById('sound-toggle').addEventListener('click', () => { 
-            soundEnabled = !soundEnabled; 
-            document.getElementById('sound-icon').className = soundEnabled ? "fa-solid fa-volume-high text-red-500" : "fa-solid fa-volume-xmark text-slate-400"; 
+        // BGM（ミュージック）トグルの処理
+        document.getElementById('music-toggle').addEventListener('click', () => { 
+            bgmEnabled = !bgmEnabled; 
+            document.getElementById('music-icon').className = bgmEnabled ? "fa-solid fa-music text-blue-500 text-sm" : "fa-solid fa-music text-slate-400 text-sm"; 
             
-            if (soundEnabled) {
+            if (bgmEnabled) {
                 if (currentState === STATE.REVEALED) {
                     bgmBattle.play().catch(e=>{});
                 } else if (isOpStarted) {
@@ -536,6 +545,12 @@
                 bgmOp.pause();
                 bgmBattle.pause();
             }
+        });
+
+        // SE（効果音）トグルの処理
+        document.getElementById('sound-toggle').addEventListener('click', () => { 
+            soundEnabled = !soundEnabled; 
+            document.getElementById('sound-icon').className = soundEnabled ? "fa-solid fa-volume-high text-red-500 text-sm" : "fa-solid fa-volume-xmark text-slate-400 text-sm"; 
         });
 
         document.getElementById('lang-toggle').addEventListener('click', () => { 
@@ -707,7 +722,7 @@
                 const heightM = (pokeData.height / 10).toFixed(1);
                 const weightKg = (pokeData.weight / 10).toFixed(1);
 
-                // 特性（キャッシュを活用して高速化）
+                // 特性
                 const abilitiesHtmlPromises = pokeData.abilities.map(async (a) => {
                     let abName = a.ability.name.replace('-', ' ');
                     if (currentLang === 'en') {
@@ -725,7 +740,7 @@
                             const abData = await abRes.json();
                             const jpObj = abData.names.find(n => n.language.name === 'ja-Hrkt') || abData.names.find(n => n.language.name === 'ja');
                             const jpAb = jpObj ? jpObj.name : abName;
-                            abilityCache[a.ability.url] = jpAb; // キャッシュ保存
+                            abilityCache[a.ability.url] = jpAb;
                             const suffix = a.is_hidden ? ' <span class="text-[10px] text-slate-400 font-normal">(夢)</span>' : '';
                             return `<span class="px-2 py-1 bg-slate-100 rounded-lg text-xs border border-slate-200">${jpAb}${suffix}</span>`;
                         } catch(e) { 
@@ -754,35 +769,24 @@
                     `;
                 }).join('');
 
-                // ==========================================
-                // 1. まず「画像読み込み中」へテキストを切り替え
-                // ==========================================
                 document.getElementById('loading-spinner-text').textContent = TRANSLATIONS[currentLang].loadingImg;
 
-                // ==========================================
-                // 2. 画像の非同期ロードを待機 (Promise化)
-                // ==========================================
                 await new Promise((resolve) => {
                     const preloaderImg = new Image();
                     preloaderImg.crossOrigin = "anonymous";
                     
                     preloaderImg.onload = () => {
-                        pImg.src = imgUrl; // 実際のimgタグにsrcをセット
+                        pImg.src = imgUrl; 
                         resolve();
                     };
                     
                     preloaderImg.onerror = () => {
-                        resolve(); // 読み込みエラーになっても処理を進める
+                        resolve(); 
                     };
                     
                     preloaderImg.src = imgUrl; 
                 });
 
-                // ==========================================
-                // 3. 準備が完了したら一斉に表示・発火する（UX向上）
-                // ==========================================
-                
-                // テキストやステータスをDOMに反映
                 document.getElementById('prize-name').textContent = finalName;
                 document.getElementById('prize-genus-detail').textContent = finalGenus || "--";
                 document.getElementById('prize-rarity').textContent = `No. ${targetId.toString().padStart(4, '0')}`;
@@ -795,7 +799,6 @@
                 const statsContainer = document.getElementById('stats-container');
                 statsContainer.innerHTML = statsHtml;
                 
-                // ステータスバーのアニメーション
                 setTimeout(() => {
                     statsContainer.querySelectorAll('.stat-bar-fill').forEach(bar => {
                         bar.style.width = bar.getAttribute('data-width');
@@ -807,16 +810,14 @@
                 
                 lastWonItemImageUrl = imgUrl; lastWonItemName = finalName;
 
-                // ローダーを隠して、カード画像をフェードイン
                 loader.classList.add('opacity-0');
                 setTimeout(() => loader.classList.add('hidden'), 400); 
                 pImg.classList.remove('opacity-0', 'scale-90'); 
                 pImg.classList.add('opacity-100', 'scale-100');
 
-                // 演出（花吹雪・サウンド・鳴き声）を画像表示と同時に発火させる
                 confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ef4444', '#ffffff', '#eab308'] });
                 
-                bgmOp.pause();
+                bgmOp.pause(); // 常に止める
                 playAudio('success');
                 setTimeout(() => { playPokemonCry(targetId); }, 600);
 
@@ -867,8 +868,8 @@
             // 戦闘BGMを停止し、オープニングBGMを最初から再開する
             bgmBattle.pause();
             bgmBattle.currentTime = 0;
-            if (soundEnabled && isOpStarted) {
-                bgmOp.currentTime = 0; // 曲を最初から流す
+            if (bgmEnabled && isOpStarted) {
+                bgmOp.currentTime = 0; 
                 bgmOp.play().catch(e=>{});
             }
         });
