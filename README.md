@@ -4,7 +4,8 @@
 
 ---
 
-<a id="english"></a>
+<div id="english"></div>
+
 ## 🌟 Overview
 **Pokémon Gacha** is a web-based, fully free Gacha simulator where you can encounter infinite unseen Pokémon! Turn the wheel of destiny, and a random Pokémon card will be dispensed from the capsule. 
 
@@ -30,5 +31,3 @@ Since this is a client-side only web application, no complex installation is req
 1. Clone this repository:
    ```bash
    git clone https://github.com/your-username/pokemon-gacha.git
-
-
