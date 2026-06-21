@@ -345,8 +345,8 @@
                 howToPlayContent: `
                     <ul class='space-y-1.5 text-slate-600 font-bold ml-1'>
                         <li>1. 🌐 Select a region from the dropdown.</li>
-                        <li>2. 🔴 Tap to spin the Gacha (100% Free!).</li>
-                        <li>3. ✨ Discover a random Pokémon card!</li>
+                        <li>2. 🔴 Tap "PLAY GACHA" (100% Free!).</li>
+                        <li>3. ⚪ <span class='text-red-500'>Tap the dropped capsule</span> to reveal a Pokémon card!</li>
                         <li>4. 🐦 The card image is <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>automatically copied</span>! Paste and share it easily on X.</li>
                     </ul>
                 `,
@@ -373,7 +373,7 @@
                     <ul class='space-y-1.5 text-slate-600 font-bold ml-1'>
                         <li>1. 🌐 出現させたい地方を選ぶ</li>
                         <li>2. 🔴 ガチャを回す（何度でも無料！）</li>
-                        <li>3. ✨ 未知のポケモンカードと出会う！</li>
+                        <li>3. ⚪ <span class='text-red-500'>出てきたカプセルをタップ</span>してカードをゲット！</li>
                         <li>4. 🐦 <span class='text-blue-500 underline decoration-blue-300 underline-offset-2'>画像が自動でコピー</span>されます！そのままX(旧Twitter)へペーストして簡単シェア！</li>
                     </ul>
                 `,
@@ -629,7 +629,7 @@
                 // TCG APIは遅いことが多いので、通信量削減(select)と2秒のタイムアウトを設ける
                 const fetchTcgApi = async () => {
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 2000);
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
                     try {
                         const res = await fetch(`https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:${targetId}&select=id,images`, { signal: controller.signal });
                         clearTimeout(timeoutId);
