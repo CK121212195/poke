@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ポケモン ガシャポン</title>
+    <title>Pokémon Gacha</title>
     
     <!-- Google Analytics (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQKF36CZLY"></script>
@@ -20,15 +20,15 @@
     <!-- Open Graph Meta Tags (OGP) -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pythonddd.github.io/pokemon/">
-    <meta property="og:title" content="ポケモン ガシャポン">
-    <meta property="og:description" content="【カプセルの中に広がる無限の出会い。運命のハンドルを回して、まだ見ぬポケモンたちを捕まえよう！】 PokeAPIから本物のポケモンデータを引き出し、ランダムでポケモンをゲット。何度でも永久無料で回せます。">
+    <meta property="og:title" content="Pokémon Gacha">
+    <meta property="og:description" content="【Infinite encounters unfold within the capsule. Turn the wheel of destiny to catch unseen Pokémon!】 Fetching real Pokémon data from PokéAPI, get random Pokémon. You can spin endlessly for completely free.">
     <meta property="og:image" content="https://pythonddd.github.io/pokemon/ogp.png">
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://pythonddd.github.io/pokemon/">
-    <meta name="twitter:title" content="ポケモン ガシャポン">
-    <meta name="twitter:description" content="【カプセルの中に広がる無限の出会い。運命のハンドルを回して、まだ見ぬポケモンたちを捕まえよう！】 PokeAPIから本物のポケモンデータを引き出し、ランダムでポケモンをゲット。何度でも永久無料で回せます。">
+    <meta name="twitter:title" content="Pokémon Gacha">
+    <meta name="twitter:description" content="【Infinite encounters unfold within the capsule. Turn the wheel of destiny to catch unseen Pokémon!】 Fetching real Pokémon data from PokéAPI, get random Pokémon. You can spin endlessly for completely free.">
     <meta name="twitter:image" content="https://pythonddd.github.io/pokemon/ogp.png">
     
     <!-- Tailwind CSS -->
@@ -92,7 +92,7 @@
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col justify-between overflow-x-hidden selection:bg-red-500/20">
 
-    <!-- BGM用オーディオ要素 (op.mp3 と battle.mp3 を用意してください) -->
+    <!-- BGM用オーディオ要素 -->
     <audio id="bgm-op" src="op.mp3" loop></audio>
     <audio id="bgm-battle" src="battle.mp3" loop></audio>
 
@@ -106,7 +106,7 @@
                 </div>
                 <div>
                     <h1 id="header-title" class="text-xl sm:text-2xl font-black tracking-tight text-slate-800">
-                        ポケモン ガシャポン
+                        Pokémon Gacha
                     </h1>
                 </div>
             </div>
@@ -114,7 +114,7 @@
             <div class="flex items-center space-x-2">
                 <button id="lang-toggle" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center space-x-1.5 font-bold text-xs border-2 border-slate-300">
                     <i class="fa-solid fa-globe text-blue-500"></i>
-                    <span id="lang-toggle-text">JP / EN</span>
+                    <span id="lang-toggle-text">EN / JP</span>
                 </button>
                 <button id="sound-toggle" class="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 transition flex items-center space-x-1 border-2 border-slate-300">
                     <i id="sound-icon" class="fa-solid fa-volume-high text-red-500"></i>
@@ -173,7 +173,7 @@
                 
                 <div class="space-y-3 relative z-10">
                     <h2 id="main-heading" class="text-2xl sm:text-3xl font-black tracking-tight text-slate-800 leading-tight">
-                        ポケモン ガシャポン
+                        Pokémon Gacha
                     </h2>
                     <p id="main-desc" class="text-sm text-slate-600 leading-relaxed font-bold">
                         <!-- JSで動的に書き換えられます -->
@@ -189,7 +189,7 @@
 
                 <button id="btn-play" class="w-full bg-red-500 hover:bg-red-600 text-white font-black py-4 px-6 rounded-2xl border-b-4 border-red-700 active:border-b-0 active:translate-y-1 transition-all text-lg tracking-wider flex items-center justify-center space-x-2 relative z-10">
                     <i class="fa-solid fa-play"></i>
-                    <span id="btn-play-text">ガチャを回す</span>
+                    <span id="btn-play-text">PLAY GACHA</span>
                 </button>
             </div>
         </div>
@@ -214,31 +214,31 @@
                 <!-- カードボディ -->
                 <div class="p-5 sm:p-6 space-y-6 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNlMmU4ZjAiIGZpbGwtb3BhY2l0eT0iMC40Ii8+PC9zdmc+')]">
                     
-                    <!-- 画像エリア -->
-                    <div class="relative w-full aspect-square max-h-64 bg-slate-50 rounded-2xl border-2 border-slate-200 shadow-inner flex items-center justify-center overflow-hidden group">
-                        <div id="prize-img-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-10 fade-transition">
+                    <!-- 画像エリア（ポケモンカード仕様） -->
+                    <div class="relative w-full min-h-[300px] sm:min-h-[380px] flex items-center justify-center group mb-2 overflow-visible">
+                        <div id="prize-img-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-transparent z-10 fade-transition">
                             <div class="w-12 h-12 bg-red-500 rounded-full border-4 border-slate-800 flex items-center justify-center animate-bounce">
                                 <div class="w-full h-1 bg-slate-800 absolute"></div>
                                 <div class="w-4 h-4 bg-white border-2 border-slate-800 rounded-full z-10"></div>
                             </div>
-                            <span id="loading-spinner-text" class="font-pixel text-sm font-bold text-slate-500 mt-4 animate-pulse">図鑑データを取得中...</span>
+                            <span id="loading-spinner-text" class="font-pixel text-sm font-bold text-slate-500 mt-4 animate-pulse">LOADING DATA...</span>
                         </div>
-                        <!-- 実際の画像 -->
-                        <img id="prize-img" class="w-full h-full object-contain p-4 relative z-0 opacity-0 transform scale-90 fade-transition drop-shadow-xl" src="" alt="Pokemon Art">
+                        <!-- 実際の画像（ポケモンカード） -->
+                        <img id="prize-img" class="max-h-[320px] sm:max-h-[400px] max-w-full object-contain relative z-0 opacity-0 transform scale-90 fade-transition drop-shadow-2xl rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer" src="" alt="Pokemon Card">
                     </div>
 
                     <!-- 基本データ群 -->
                     <div class="grid grid-cols-2 gap-3 text-sm font-bold">
                         <div class="col-span-2 bg-white p-3 rounded-xl border-2 border-slate-100 shadow-sm flex justify-between items-center">
-                            <span class="text-slate-400" id="label-genus">分類</span>
+                            <span class="text-slate-400" id="label-genus">Category</span>
                             <span class="text-slate-700 text-base" id="prize-genus-detail">--</span>
                         </div>
                         <div class="bg-white p-3 rounded-xl border-2 border-slate-100 shadow-sm flex justify-between items-center">
-                            <span class="text-slate-400" id="label-height">高さ</span>
+                            <span class="text-slate-400" id="label-height">Height</span>
                             <span class="text-slate-700 text-base" id="prize-height">-- m</span>
                         </div>
                         <div class="bg-white p-3 rounded-xl border-2 border-slate-100 shadow-sm flex justify-between items-center">
-                            <span class="text-slate-400" id="label-weight">重さ</span>
+                            <span class="text-slate-400" id="label-weight">Weight</span>
                             <span class="text-slate-700 text-base" id="prize-weight">-- kg</span>
                         </div>
                     </div>
@@ -250,7 +250,7 @@
 
                     <!-- 種族値ステータスバー -->
                     <div class="bg-white p-4 rounded-xl border-2 border-slate-100 shadow-sm space-y-3">
-                        <span class="text-slate-400 text-xs font-bold block mb-2 font-pixel" id="label-stats">種族値</span>
+                        <span class="text-slate-400 text-xs font-bold block mb-2 font-pixel" id="label-stats">BASE STATS</span>
                         <div id="stats-container" class="space-y-2">
                             <!-- JSで動的にバーを生成 -->
                         </div>
@@ -258,7 +258,7 @@
 
                     <!-- 特性 -->
                     <div class="bg-white p-3 rounded-xl border-2 border-slate-100 shadow-sm">
-                        <span class="text-slate-400 text-xs font-bold block mb-1" id="label-abilities">特性</span>
+                        <span class="text-slate-400 text-xs font-bold block mb-1" id="label-abilities">Abilities</span>
                         <div id="prize-abilities" class="text-slate-700 font-bold text-sm flex flex-wrap gap-2">
                             <!-- 特性が入る -->
                         </div>
@@ -268,16 +268,16 @@
                     <div class="space-y-3 pt-2">
                         <button id="btn-share-twitter" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-xl text-center transition flex items-center justify-center space-x-2 border-b-4 border-slate-950 active:border-b-0 active:translate-y-1">
                             <i class="fa-brands fa-x-twitter text-lg"></i>
-                            <span id="btn-share-twitter-text">Xに投稿する</span>
+                            <span id="btn-share-twitter-text">Share on X</span>
                         </button>
                         
                         <div class="flex gap-3">
                             <button id="btn-close-prize" class="w-1/2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 px-4 rounded-xl font-bold transition border-2 border-slate-300">
-                                閉じる
+                                Close
                             </button>
                             <a id="btn-explorer-link" href="#" target="_blank" rel="noopener noreferrer" class="w-1/2 bg-blue-50 hover:bg-blue-100 text-blue-600 border-2 border-blue-200 py-3 px-4 rounded-xl font-bold transition flex items-center justify-center space-x-1 text-sm">
                                 <i class="fa-solid fa-book-open"></i>
-                                <span id="btn-explorer-link-text">公式図鑑で確認</span>
+                                <span id="btn-explorer-link-text">Pokédex</span>
                             </a>
                         </div>
                     </div>
@@ -291,12 +291,13 @@
         const STATE = { IDLE: "idle", ROLLING: "rolling", HAS_CAPSULE: "has_capsule", REVEALED: "revealed" };
         let currentState = STATE.IDLE;
         let soundEnabled = true;
-        let currentLang = 'jp';
+        // デフォルトの言語を英語に設定
+        let currentLang = 'en';
 
         let lastWonItemImageUrl = "";
         let lastWonItemName = "";
 
-        // ★ BGM管理変数と要素取得 ★
+        // BGM管理変数と要素取得
         const bgmOp = document.getElementById('bgm-op');
         const bgmBattle = document.getElementById('bgm-battle');
         let isOpStarted = false;
@@ -392,6 +393,8 @@
             document.getElementById('btn-close-prize').textContent = t.close;
             document.getElementById('btn-explorer-link-text').textContent = t.pokedex;
 
+            document.getElementById('lang-toggle-text').textContent = lang === 'en' ? 'EN / JP' : 'JP / EN';
+
             const select = document.getElementById('select-mode');
             const currentVal = select.value || 'all';
             select.innerHTML = t.opts.map(o => `<option value="${o.val}">${o.text}</option>`).join('');
@@ -400,7 +403,7 @@
 
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // ★ ポケモン本物の鳴き声（PokeAPI）を再生し、終了後に戦闘曲を流す ★
+        // ポケモン本物の鳴き声（PokeAPI）を再生し、終了後に戦闘曲を流す
         function playPokemonCry(id) {
             if (!soundEnabled) return;
             const cryAudio = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`);
@@ -417,7 +420,7 @@
 
             cryAudio.play().catch(e => {
                 console.warn("鳴き声データの再生に失敗しました", e);
-                // エラー時（鳴き声がない等）は、1秒後に戦闘曲を再生
+                // エラー時は1秒後に戦闘曲を再生
                 setTimeout(() => {
                     if (currentState === STATE.REVEALED && soundEnabled) {
                         bgmBattle.volume = 0.2;
@@ -483,7 +486,10 @@
             }
         });
 
-        document.getElementById('lang-toggle').addEventListener('click', () => { playAudio('click'); updateLanguage(currentLang === 'en' ? 'jp' : 'en'); });
+        document.getElementById('lang-toggle').addEventListener('click', () => { 
+            playAudio('click'); 
+            updateLanguage(currentLang === 'en' ? 'jp' : 'en'); 
+        });
         
         function toggleModal(modal, show) {
             if (show) { modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('opacity-100'), 10); } 
@@ -567,13 +573,38 @@
             document.getElementById('crank-handle').style.transition = "none";
 
             try {
-                // PokeAPIからデータ取得
-                const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${targetId}`);
+                // APIからデータ並行取得 (PokeAPI + Pokemon TCG API)
+                const [pokeRes, speciesRes, tcgRes] = await Promise.all([
+                    fetch(`https://pokeapi.co/api/v2/pokemon/${targetId}`),
+                    fetch(`https://pokeapi.co/api/v2/pokemon-species/${targetId}`),
+                    fetch(`https://api.pokemontcg.io/v2/cards?q=nationalPokedexNumbers:${targetId}`).catch(() => null)
+                ]);
+
                 const pokeData = await pokeRes.json();
-                
-                const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${targetId}`);
                 const speciesData = await speciesRes.json();
                 
+                // カード画像URLの取得
+                let imgUrl = "";
+                if (tcgRes && tcgRes.ok) {
+                    try {
+                        const tcgData = await tcgRes.json();
+                        if (tcgData && tcgData.data && tcgData.data.length > 0) {
+                            // 複数カードがある場合はランダムに1枚抽出
+                            const randomCard = tcgData.data[Math.floor(Math.random() * tcgData.data.length)];
+                            imgUrl = randomCard.images.large || randomCard.images.small;
+                        }
+                    } catch(e) {
+                        console.warn("TCG API parse error", e);
+                    }
+                }
+
+                // カードが見つからない場合は公式アートワークをフォールバックに
+                if (!imgUrl) {
+                    imgUrl = (pokeData.sprites.other && pokeData.sprites.other["official-artwork"].front_default) 
+                             ? pokeData.sprites.other["official-artwork"].front_default 
+                             : pokeData.sprites.front_default;
+                }
+
                 // 名前
                 let jpNameObj = speciesData.names.find(n => n.language.name === "ja-Hrkt") || speciesData.names.find(n => n.language.name === "ja");
                 let enNameObj = speciesData.names.find(n => n.language.name === "en");
@@ -656,11 +687,6 @@
                     `;
                 }).join('');
 
-                // 画像URL
-                const imgUrl = (pokeData.sprites.other && pokeData.sprites.other["official-artwork"].front_default) 
-                             ? pokeData.sprites.other["official-artwork"].front_default 
-                             : pokeData.sprites.front_default;
-
                 const preloaderImg = new Image();
                 preloaderImg.crossOrigin = "anonymous";
                 
@@ -696,7 +722,7 @@
 
                     confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#ef4444', '#ffffff', '#eab308'] });
                     
-                    // ★ オープニング曲を一時停止し、ファンファーレ音 → 本物の鳴き声 → 戦闘曲の順に再生 ★
+                    // オープニング曲を一時停止し、ファンファーレ音 → 本物の鳴き声 → 戦闘曲の順に再生
                     bgmOp.pause();
                     playAudio('success');
                     setTimeout(() => {
@@ -743,7 +769,7 @@
         document.getElementById('btn-play').addEventListener('click', handleStartGacha);
         document.getElementById('crank-handle').addEventListener('click', () => { if (currentState === STATE.IDLE) handleStartGacha(); });
         
-        // ★ 閉じるボタンを押したときの処理 ★
+        // 閉じるボタンを押したときの処理
         document.getElementById('btn-close-prize').addEventListener('click', () => {
             playAudio('click');
             toggleModal(document.getElementById('prize-modal'), false);
@@ -761,8 +787,8 @@
             }
         });
 
-        // 起動時
-        updateLanguage('jp');
+        // 起動時の言語を英語に
+        updateLanguage('en');
     </script>
 </body>
 </html>
