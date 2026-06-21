@@ -6,12 +6,12 @@
     <title>Pokémon Gacha</title>
     
     <!-- Google Analytics (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PQKF36CZLY"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-20G9CDTXBK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-PQKF36CZLY');
+      gtag('config', 'G-20G9CDTXBK');
     </script>
 
     <!-- Favicon -->
@@ -195,6 +195,17 @@
         </div>
     </main>
 
+    <!-- フッター (免責事項・寄付) -->
+    <footer class="w-full text-center text-slate-500/70 text-[10px] sm:text-xs pb-6 pt-2 z-10 relative mt-auto">
+        <div class="max-w-3xl mx-auto px-4 space-y-2 leading-relaxed">
+            <p id="footer-disclaimer"></p>
+            <p>
+                <span id="footer-donation-text"></span>
+                <span class="select-all font-mono bg-slate-800/5 px-1 py-0.5 rounded border border-slate-800/10">brashridge65@walletofsatoshi.com</span>
+            </p>
+        </div>
+    </footer>
+
     <!-- 結果表示モーダル -->
     <div id="prize-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden transition-all duration-300 opacity-0 overflow-y-auto">
         <div class="min-h-screen px-4 py-8 flex justify-center items-start sm:items-center">
@@ -320,6 +331,8 @@
                 selectMode: "SELECT REGION", btnPlay: "PLAY GACHA", loading: "LOADING DATA...",
                 lblGenus: "Category", lblHeight: "Height", lblWeight: "Weight", lblAbilities: "Abilities", lblStats: "BASE STATS",
                 shareX: "Share on X", close: "Close", pokedex: "Pokédex",
+                footerDisclaimer: "This is an unofficial fan site. Pokémon and all respective names are trademarks of Nintendo, Creatures Inc., and GAME FREAK inc. This site respects all copyrights and operates in compliance with applicable laws, with no intention of infringement.",
+                footerDonation: "Bitcoin (Lightning) Donation: ",
                 opts: [
                     {val: "all", text: "🌐 All Regions (1-1025)"},
                     {val: "kanto", text: "🔴 Kanto (1-151)"}, {val: "johto", text: "🟡 Johto (152-251)"},
@@ -336,6 +349,8 @@
                 selectMode: "出現する地方を選択", btnPlay: "ガチャを回す", loading: "図鑑データを取得中...",
                 lblGenus: "分類", lblHeight: "高さ", lblWeight: "重さ", lblAbilities: "特性", lblStats: "種族値",
                 shareX: "Xに投稿する", close: "閉じる", pokedex: "公式図鑑で確認",
+                footerDisclaimer: "※当サイトはファンが制作した非公式のサイトです。ポケットモンスター・ポケモン・Pokémonは任天堂・クリーチャーズ・ゲームフリークの登録商標です。当サイトはすべての著作権を大切にし、法令を遵守して運営しており、権利を侵害する意図は一切ございません。",
+                footerDonation: "Bitcoin (Lightning) 寄付アドレス: ",
                 opts: [
                     {val: "all", text: "🌐 全地方 (1-1025)"},
                     {val: "kanto", text: "🔴 カントー地方 (1-151)"}, {val: "johto", text: "🟡 ジョウト地方 (152-251)"},
@@ -394,6 +409,10 @@
             document.getElementById('btn-explorer-link-text').textContent = t.pokedex;
 
             document.getElementById('lang-toggle-text').textContent = lang === 'en' ? 'EN / JP' : 'JP / EN';
+            
+            // フッター関連
+            document.getElementById('footer-disclaimer').textContent = t.footerDisclaimer;
+            document.getElementById('footer-donation-text').textContent = t.footerDonation;
 
             const select = document.getElementById('select-mode');
             const currentVal = select.value || 'all';
